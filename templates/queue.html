@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row">
+    <div class="span-8">
+        <h2>Download Queue</h2>
+        <table>
+            <thead>
+                <tr><th>Added</th><th>Status</th><th>Creator</th><th>URL</th></tr>
+            </thead>
+            <tbody>
+    {% for d in downloads %}
+                <tr>
+                    <td>{{ d.created_at }}</td>
+                    <td>{{ d.status() }}</td>
+                    <td>{{ d.created_by.name }}</td>
+                    <td>{{ d.url }}</td>
+                </tr>
+    {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
