@@ -2,6 +2,7 @@ from datetime import datetime, timedelta
 from functools import wraps
 
 import random, string
+from urlparse import urlparse
 
 from flask import Flask, request, Response, session, render_template, redirect, url_for, make_response
 from flask.ext.sqlalchemy import SQLAlchemy
@@ -47,6 +48,16 @@ class Download(db.Model):
             return 'Downloading'
         else:
             return 'Scheduled'
+
+    def filename(self):
+        fn = self.url.split('/')[-1]
+        if len(fn) > 10:
+            return fn[0:9] + '...' + fn[-3:]
+        return fn
+
+    def source(self):
+        up = urlparse(self.url)
+        return up.hostname
 
 """
 User
@@ -135,7 +146,15 @@ def requires_authentication(func):
 @app.route('/')
 @requires_authentication
 def home():
-    return render_template('home.html', user=active_user)
+    # Dashboard
+
+    recently_queued = db.session.query(Download).filter(Download.started_at == None).order_by(Download.created_at.desc()).limit(5).all()
+
+    recently_downloaded = db.session.query(Download).filter(Download.completed_at != None).order_by(Download.completed_at.desc()).limit(5).all()
+
+    next_to_download = db.session.query(Download).filter(Download.completed_at == None).order_by(Download.download_at.asc()).all()
+
+    return render_template('home.html', user=active_user, queued=recently_queued, finished=recently_downloaded, next=next_to_download)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
