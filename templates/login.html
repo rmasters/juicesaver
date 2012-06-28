@@ -1,5 +1,22 @@
-<form action="/login" method="post">
-    <p><input type="text" name="name" placeholder="Username"></p>
-    <p><input type="password" name="password" placeholder="Password"></p>
-    <p><input type="submit" value="Login"></p>
-</form>
+{% extends 'base.html' %}
+{% block content %}
+<div class="row">
+    <div class="span4 well">
+        <h2>What's my username?</h2>
+        <p>If you don't have a username you can <a href="/register">register</a>, although you may need to be approved by the administrator.</p>
+    </div>
+    <div class="span6">
+        <h2>Login</h2>
+        {% if errors %}
+        {% for e in errors %}
+        <div class="alert alert-error">{{ e }}</div>
+        {% endfor %}
+        {% endif %}
+        <form action="/login" method="post">
+            <p><input type="text" name="name" placeholder="Username"></p>
+            <p><input type="password" name="password" placeholder="Password"></p>
+            <p><input type="submit" value="Login" class="btn btn-primary"></p>
+        </form>
+    </div>
+</div>
+{% endblock %} 

@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from functools import wraps
 
 import random, string
@@ -152,13 +152,24 @@ def login():
             db.session.commit()
 
             resp = make_response(render_template('logged_in.html'))
+
             cookie_str = 'id=%d&token=%s' % (u.id, u.session_token)
-            resp.set_cookie('user', cookie_str)
+            expiry_dt = datetime.now() + timedelta(days=1)
+
+            resp.set_cookie('user', cookie_str, expires=expiry_dt)
             return resp
         except Exception as e:
-            print e
             errors.append("Invalid credentials")
+            errors.append(e)
     return render_template('login.html', errors=errors)
+
+@app.route('/logout')
+@requires_authentication
+def logout():
+    resp = make_response(render_template('logged_out.html'))
+    resp.set_cookie('user', value='', expires=-1)
+
+    return resp
 
 @app.route('/register')
 def register():
