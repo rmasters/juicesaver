@@ -1,7 +1,6 @@
 # JuiceSaver
 
-A multi-user file downloader, useful for those on internet plans with a strict
-daytime limit for overnight downloading.
+A download scheduler with web interface. Designed for users with restrictive daytime internet usage limits (bandwidth caps) but plenty of off-peak/overnight capacity. Currently in use on a Raspberry Pi, saving files to a NAS.
 
 ## History
 
