@@ -13,7 +13,7 @@
                 <div class="container">
                     <a class="brand">DownloadManager</a>
                     <ul class="nav">
-                        {% if user %}
+                        {% if active_user %}
                         <li><a href="/">Home</a></li>
                         <li><a href="/queue">Downloads</a></li>
                         <li><a href="/users">Manage Users</a></li>
@@ -23,12 +23,13 @@
                         <li><a href="/about">About</a></li>
                         {% endif %}
                     </ul>
-                    {% if user %}
                     <ul class="nav pull-right">
-                        <li><a href="/users/{{user.id}}">Hey {{user.name}}</a></li>
+                    {% if active_user %}
+                        <li><a href="/users/{{active_user.id}}">Hey {{active_user.name}}</a></li>
                         <li><a href="/logout">Logout</a></li>
-                    </ul>
                     {% endif %}
+                        <li><a>Time: {{ servertime }}</a></li>
+                    </ul>
                 </div>
             </div>
         </div>

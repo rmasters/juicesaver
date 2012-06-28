@@ -173,6 +173,13 @@ def requires_authentication(func):
         return func(*args, **kwargs)
     return _auth_decorator
 
+# Easy method of passing variables used in base.html/all templates
+def default_template(name, **kwargs):
+    return render_template(name, 
+            active_user=active_user,
+            servertime=datetime.now().strftime('%H:%M %Z'),
+            **kwargs)
+
 @app.route('/')
 @requires_authentication
 def home():
@@ -184,7 +191,7 @@ def home():
 
     next_to_download = db.session.query(Download).filter(Download.completed_at == None).order_by(Download.download_at.asc()).all()
 
-    return render_template('home.html', user=active_user, queued=recently_queued, finished=recently_downloaded, next=next_to_download)
+    return default_template('home.html', queued=recently_queued, finished=recently_downloaded, next=next_to_download)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -200,7 +207,7 @@ def login():
             db.session.add(u)
             db.session.commit()
 
-            resp = make_response(render_template('logged_in.html'))
+            resp = make_response(default_template('logged_in.html'))
 
             cookie_str = 'id=%d&token=%s' % (u.id, u.session_token)
             expiry_dt = datetime.now() + timedelta(days=1)
@@ -210,12 +217,12 @@ def login():
         except Exception as e:
             errors.append("Invalid credentials")
             errors.append(e)
-    return render_template('login.html', errors=errors)
+    return default_template('login.html', errors=errors)
 
 @app.route('/logout')
 @requires_authentication
 def logout():
-    resp = make_response(render_template('logged_out.html'))
+    resp = make_response(default_template('logged_out.html'))
     resp.set_cookie('user', value='', expires=-1)
 
     return resp
@@ -228,7 +235,7 @@ def register():
 @requires_authentication
 def queue():
     downloads = db.session.query(Download).order_by(Download.created_at.desc()).all()
-    return render_template('queue.html', downloads=downloads, user=active_user)
+    return default_template('queue.html', downloads=downloads)
 
 @app.route('/schedule', methods=['GET', 'POST'])
 @requires_authentication
@@ -243,13 +250,13 @@ def schedule():
 
         return redirect(url_for('queue'))
 
-    return render_template('schedule.html', errors=errors, user=active_user)
+    return default_template('schedule.html', errors=errors)
 
 @app.route('/users')
 @requires_authentication
 def users_list():
     users = db.session.query(User).order_by(User.created_at).all()
-    return render_template('users.html', users=users, user=active_user)
+    return default_template('users.html', users=users)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=9000, debug=True)
