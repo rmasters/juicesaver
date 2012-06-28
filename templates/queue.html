@@ -14,15 +14,10 @@
 {% endblock %}
 
 {% block content %}
-<div class="page-header">
-    <div class="row">
-        <div class="span4"><h1>Download queue</h1></div>
-        <div class="span2"><a href="{{ url_for('schedule') }}" class="btn btn-primary">Add a download</a></div>
-    </div>
-</div>
+<div class="page-header"><h1>Download queue</h1></div>
 
 <div class="row">
-    <div class="span-8">
+    <div class="span8">
         <table class="table table-bordered">
             <thead>
                 <tr><th>Added</th><th>Status</th><th>Creator</th><th>URL</th></tr>
@@ -40,6 +35,10 @@
     {% endfor %}
             </tbody>
         </table>
+    </div>
+
+    <div class="span3 well">
+        <p><a href="{{ url_for('schedule') }}" class="btn btn-primary">Add download</a></p>
     </div>
 </div>
 {% endblock %}

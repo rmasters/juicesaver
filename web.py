@@ -245,5 +245,11 @@ def schedule():
 
     return render_template('schedule.html', errors=errors, user=active_user)
 
+@app.route('/users')
+@requires_authentication
+def users_list():
+    users = db.session.query(User).order_by(User.created_at).all()
+    return render_template('users.html', users=users, user=active_user)
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=9000, debug=True)
