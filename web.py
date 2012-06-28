@@ -104,6 +104,8 @@ def is_authenticated():
     if 'user' not in request.cookies:
         return False
 
+    global active_user
+
     try:
         cookie = request.cookies.get('user')
         cookie_bits = cookie.split('&')
