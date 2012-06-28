@@ -4,7 +4,7 @@ from sqlalchemy import create_engine
 from settings import SQLALCHEMY_DATABASE_URI
 
 master_path = "/home/ross/nas/downloads"
-delay = 3600
+delay = 600
 
 engine = create_engine('sqlite:///data/data.db')
 conn = engine.connect()
@@ -47,7 +47,7 @@ while True:
             conn.execute("""UPDATE downloads SET completed_at = DATETIME('now') WHERE id = %d""" % row['id'])
 
     except Exception as e:
-        log("ERROR %s: %s", (type(e), str(e)))
+        log("ERROR %s: %s" % (type(e), str(e)))
         exit()
 
     log("Waiting %d seconds..." % delay)
