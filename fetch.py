@@ -36,7 +36,7 @@ while True:
                 src_size = int(src_meta.getheaders('Content-length')[0])
                 log("Downloading %d bytes" % src_size)
 
-                block_size = 8192
+                block_size = 8*1024
                 while True:
                     buffer = src.read(block_size)
                     if not buffer:
