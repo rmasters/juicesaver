@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+from dateutil import parser
 from functools import wraps
 
 import random, string
@@ -25,15 +26,44 @@ class Download(db.Model):
     completed_at = db.Column(db.DateTime, nullable=True)
     user = db.Column(db.Integer, db.ForeignKey('users.id'))
 
-    def __init__(self, url=None, created_at=None, started_at=None, completed_at=None):
+    def __init__(self, url=None, created_at=None, download_at=None, started_at=None, completed_at=None, user=None):
         if url:
             self.url = url
+
         if created_at:
-            self.created_at = created_at
+            self.set_created_at(created_at)
+        else:
+            self.created_at = datetime.now()
+
+        if download_at:
+            self.set_download_at(download_at)
         if started_at:
-            self.started_at = started_at
+            self.set_started_at(started_at)
         if completed_at:
-            self.completed_at = completed_at
+            self.set_completed_at(completed_at)
+
+        if user:
+            self.set_user(user)
+
+    def set_user(self, user):
+        if type(user) == User:
+            user = user.id
+        self.user = int(user)
+
+    def set_download_at(self, ts):
+        if type(ts) != datetime:
+            ts = parser.parse(ts)
+        self.download_at = ts
+
+    def set_started_at(self, ts):
+        if type(ts) != datetime:
+            ts = parser.parse(ts)
+        self.started_at = ts
+
+    def set_completed_at(self, ts):
+        if type(ts) != datetime:
+            ts = parser.parse(ts)
+        self.completed_at = ts
 
     def is_completed(self):
         return self.completed_at is not None
@@ -194,11 +224,26 @@ def logout():
 def register():
     pass
 
-@app.route('/queue', methods=['GET', 'POST'])
+@app.route('/queue')
 @requires_authentication
 def queue():
     downloads = db.session.query(Download).all()
     return render_template('queue.html', downloads=downloads, user=active_user)
+
+@app.route('/schedule', methods=['GET', 'POST'])
+@requires_authentication
+def schedule():
+    errors = []
+    if request.form:
+        d = Download(url=request.form['url'], 
+                download_at=request.form['download_at'],
+                user=active_user)
+        db.session.add(d)
+        db.session.commit()
+
+        return redirect(url_for('queue'))
+
+    return render_template('schedule.html', errors=errors, user=active_user)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=9000, debug=True)

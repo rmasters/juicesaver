@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row">
+    <div class="span6">
+        <h2>Schedule a download</h2>
+        <form action="/schedule" method="post">
+            <p><input type="text" name="url" placeholder="URL to download"></p>
+            <p><label>Download date/time
+                <input type="date" name="download_at" placeholder="Format: YYYY-MM-DD HH:MM:SS"></label></p>
+            <p><input type="submit" value="Schedule" class="btn btn-primary"></p>
+        </form>
+    </div>
+    <div class="span4 well">
+        <h2>Scheduling a download</h2>
+
+        <h3>Special downloads</h3>
+        <p>Scheduling the following types of links will perform special actions (like downloading the source file):</p>
+        <ul>
+            <li>YouTube urls like <code>http://youtube.com/watch?v=<b>VIDEOID</b></code></li>
+            <li>Vimeo urls like <code>http://vimeo.com/<b>VIDEOID</b></code></li>
+        </ul>
+        <p>Be aware just pasting the page for non-specially prepared URLs (like other non-listed video sites) will just download the web page - not the actual video!</p>
+    </div>
+</div>
+{% endblock %}
