@@ -258,5 +258,26 @@ def users_list():
     users = db.session.query(User).order_by(User.created_at).all()
     return default_template('users.html', users=users)
 
+@app.route('/users/add')
+@requires_authentication
+def users_add():
+    pass
+
+@app.route('/users/<int:id>')
+@requires_authentication
+def users_view(id):
+    pass
+
+@app.route('/users/<int:id>/edit', methods=['GET', 'POST'])
+@requires_authentication
+def users_edit(id):
+    pass
+
+@app.route('/users/<int:id>/delete', methods=['GET', 'POST'])
+@requires_authentication
+def users_delete(id):
+    pass
+
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=9000, debug=True)
