@@ -23,6 +23,12 @@
                         <li><a href="/about">About</a></li>
                         {% endif %}
                     </ul>
+                    {% if user %}
+                    <ul class="nav pull-right">
+                        <li><a href="/users/{{user.id}}">Hey {{user.name}}</a></li>
+                        <li><a href="/logout">Logout</a></li>
+                    </ul>
+                    {% endif %}
                 </div>
             </div>
         </div>
