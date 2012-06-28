@@ -1,20 +1,41 @@
 {% extends 'base.html' %}
 
+{% block head %}
+{{ super() }}
+<style type="text/css">
+    tr.completed td {
+        background: #DFF0D8;
+    }
+
+    tr.started td {
+        background: #D9EDF7;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
+<div class="page-header">
+    <div class="row">
+        <div class="span4"><h1>Download queue</h1></div>
+        <div class="span2"><a href="{{ url_for('schedule') }}" class="btn btn-primary">Add a download</a></div>
+    </div>
+</div>
+
 <div class="row">
     <div class="span-8">
-        <h2>Download Queue</h2>
-        <table>
+        <table class="table table-bordered">
             <thead>
                 <tr><th>Added</th><th>Status</th><th>Creator</th><th>URL</th></tr>
             </thead>
             <tbody>
     {% for d in downloads %}
-                <tr>
+        {% if d.status() == 'Completed' %}<tr class="completed">
+        {% elif d.status() == 'Started' %}<tr class="started">
+        {% else %}<tr>{% endif %}
                     <td>{{ d.created_at }}</td>
                     <td>{{ d.status() }}</td>
                     <td>{{ d.created_by.name }}</td>
-                    <td>{{ d.url }}</td>
+                    <td><a href="{{ d.url }}">{{ d.source() }} &ndash; {{ d.filename() }}</a></td>
                 </tr>
     {% endfor %}
             </tbody>

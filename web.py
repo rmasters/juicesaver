@@ -227,7 +227,7 @@ def register():
 @app.route('/queue')
 @requires_authentication
 def queue():
-    downloads = db.session.query(Download).all()
+    downloads = db.session.query(Download).order_by(Download.created_at.desc()).all()
     return render_template('queue.html', downloads=downloads, user=active_user)
 
 @app.route('/schedule', methods=['GET', 'POST'])
