@@ -3,7 +3,8 @@ import urllib2
 from sqlalchemy import create_engine
 from settings import SQLALCHEMY_DATABASE_URI
 
-master_path = "/home/ross/nas/downloads"
+#master_path = "/home/ross/nas/downloads"
+master_path = "/home/ross/data"
 delay = 600
 
 engine = create_engine('sqlite:///data/data.db')
@@ -31,7 +32,7 @@ while True:
             log("Saving to %s" % dst_path)
 
             src = urllib2.urlopen(row['url'])
-            with open(dst_path, 'wb') as dst:
+            with open(dst_path, 'wb+') as dst:
                 src_meta = src.info()
                 src_size = int(src_meta.getheaders('Content-length')[0])
                 log("Downloading %d bytes" % src_size)
