@@ -1,0 +1,18 @@
+Split models into separate module (somehow using the Flask-SQLAlchemy instance)
+Better authentication: strong password hashing, password resets
+Account creation in user manager
+Admin bitfield in users
+Restrict access based on IPs
+Better validation in models
+Share configuration between webapp and fetcher
+Fetcher should become a service
+RSS feeds for completed downloads
+
+Ideas
+=====
+Extension API for download completion (GChat/IRC/Twitter etc.)
+Extension API for individual sites (e.g. YouTube downloads)
+Configuration manager in web app
+Remote access API (JSON renderers for some views and OAuth)
+Download multiple files concurrently
+
