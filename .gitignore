@@ -1,4 +1,5 @@
 data/*
+juicesaver/data/*
 *.pyc
 *.swp
 *~

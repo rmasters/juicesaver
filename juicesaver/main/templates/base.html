@@ -1,0 +1,41 @@
+<!doctype html>
+<html>
+    <head>
+        {% block head %}
+        <title>Downloader</title>
+        <link rel="stylesheet" type="text/css" href="/static/bootstrap/css/bootstrap.min.css">
+        <style>body { padding-top: 60px; }</style>
+        {% endblock %}
+    </head>
+    <body>
+        <div class="navbar navbar-fixed-top">
+            <div class="navbar-inner">
+                <div class="container">
+                    <a class="brand">DownloadManager</a>
+                    <ul class="nav">
+                        {% if active_user %}
+                        <li><a href="/">Home</a></li>
+                        <li><a href="/queue">Downloads</a></li>
+                        <li><a href="/users">Manage Users</a></li>
+                        {% else %}
+                        <li><a href="/login">Login</a></li>
+                        <li><a href="/register">Create account</a></li>
+                        <li><a href="/about">About</a></li>
+                        {% endif %}
+                    </ul>
+                    <ul class="nav pull-right">
+                    {% if active_user %}
+                        <li><a href="/users/{{active_user.id}}">Hey {{active_user.name}}</a></li>
+                        <li><a href="/logout">Logout</a></li>
+                    {% endif %}
+                        <li><a>Time: {{ servertime }}</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            {% block content %}{% endblock %}
+        </div>
+    </body>
+</html>
